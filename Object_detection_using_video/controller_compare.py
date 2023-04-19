@@ -8,6 +8,8 @@ import imutils
 import time
 import cv2
 import os
+from VideoStream import *
+from Ambiancer import *
 
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
@@ -39,40 +41,38 @@ configPath = os.path.sep.join([args["yolo"], "yolov3.cfg"])
 # load our YOLO object detector trained on COCO dataset (80 classes)
 # and determine only the *output* layer names that we need from YOLO
 print("[INFO] loading YOLO from disk...")
+net3 = cv2.dnn.readNetFromDarknet(configPath, weightsPath)
+
 net = cv2.dnn.readNetFromDarknet(configPath, weightsPath)
+
 ln = net.getLayerNames()
 ln = [ln[i - 1] for i in net.getUnconnectedOutLayers()]
 
 # initialize the video stream, pointer to output video file, and
 # frame dimensions
-vs = cv2.VideoCapture(args["input"])
+#vs = cv2.VideoCapture(args["input"])
 writer = None
 (W, H) = (None, None)
 
-# try to determine the total number of frames in the video file
-try:
-	prop = cv2.cv.CV_CAP_PROP_FRAME_COUNT if imutils.is_cv2() \
-		else cv2.CAP_PROP_FRAME_COUNT
-	total = int(vs.get(prop))
-	print("[INFO] {} total frames in video".format(total))
+video_stream = VideoStream(args["input"])
+video_stream.start()
 
-# an error occurred while trying to determine the total
-# number of frames in the video file
-except:
-	print("[INFO] could not determine # of frames in video")
-	print("[INFO] no approx. completion time can be provided")
-	total = -1
+frames_proc = []
+
+_confidences = []
+
+lay = None
 
 # loop over frames from the video file stream
 while True:
-	# read the next frame from the file
-	(grabbed, frame) = vs.read()
 
-	# if the frame was not grabbed, then we have reached the end
-	# of the stream
-	if not grabbed:
+	print("increment")
+
+	if video_stream.is_stopped():
 		break
 
+	#frame = video_stream.read()
+	frame = cv2.imread('C:\\Users\\brene\\source\\repos\\github\\yolo_luciole\\images\\gospel.jpg')
 	# if the frame dimensions are empty, grab them
 	if W is None or H is None:
 		(H, W) = frame.shape[:2]
@@ -87,6 +87,8 @@ while True:
 	layerOutputs = net.forward(ln)
 	end = time.time()
 
+	lay = layerOutputs
+
 	# initialize our lists of detected bounding boxes, confidences,
 	# and class IDs, respectively
 	boxes = []
@@ -100,8 +102,17 @@ while True:
 			# extract the class ID and confidence (i.e., probability)
 			# of the current object detection
 			scores = detection[5:]
+			#print(scores)
+			#print("BLALAAAAAA")
+
 			classID = np.argmax(scores)
+
+			if classID != 0:
+				print("print classID")
+				print(classID)
 			confidence = scores[classID]
+
+			_confidences.append(confidence)
 
 			# filter out weak predictions by ensuring the detected
 			# probability is greater than the minimum probability
@@ -151,6 +162,11 @@ while True:
 					#cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
 				cv2.rectangle(frame, (x, y), (x + w, y + h), color, 2)
 
+			# show the output image
+			#cv2.imshow("Image", frame)
+			#print(frame.shape[:2])
+			#cv2.waitKey(0)
+
 	# check if the video writer is None
 	if writer is None:
 		# initialize our video writer
@@ -158,17 +174,52 @@ while True:
 		writer = cv2.VideoWriter(args["output"], fourcc, 30,
 			(frame.shape[1], frame.shape[0]), True)
 
-		# some information on processing single frame
-		if total > 0:
-			elap = (end - start)
-			print("[INFO] single frame took {:.4f} seconds".format(elap))
-			print("[INFO] estimated total time to finish: {:.4f}".format(
-				elap * total))
+	frames_proc.append(frame)
 
 	# write the output frame to disk
 	writer.write(frame)
 
+	break
+
 # release the file pointers
 print("[INFO] cleaning up...")
 writer.release()
-vs.release()
+#vs.release()
+
+show_image = True
+
+if show_image:
+	for f in frames_proc:
+		# show the output image
+		cv2.imshow("Image", f)
+		cv2.waitKey(0)
+
+#*********************************************
+
+ambiancer = Ambiancer(labelsPath, weightsPath, configPath)
+
+ambiancer.start_stream_proc(args["input"], args["confidence"], args["threshold"], args["output"])
+
+ambiancer.show_images(False)
+
+net_ambiancer = ambiancer.get_net()
+
+net2 = net
+#assert scores.all() == ambiancer.get_scores().all()
+assert ambiancer.get_weightpath() == weightsPath
+assert ambiancer.get_configpath() == configPath
+
+print(scores)
+
+print("ALLLEERRRR")
+print(ambiancer.get_scores())
+#assert confidences == ambiancer.get_confidence()
+
+print(lay)
+print("BOBOOO")
+print(ambiancer.get_layerout())
+assert lay.any() == ambiancer.get_layerout().any()
+#assert net3 == net
+
+print("ok")
+#assert net == net
