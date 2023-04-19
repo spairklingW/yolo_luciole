@@ -1,14 +1,5 @@
-# USAGE
-# python yolo_video.py --input videos/airport.mp4 --output output/airport_output.avi --yolo yolo-coco
-
-# import the necessary packages
-import numpy as np
 import argparse
-import imutils
-import time
-import cv2
 import os
-from VideoStream import *
 from Ambiancer import *
 
 # construct the argument parse and parse the arguments
