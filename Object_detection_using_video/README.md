@@ -1,0 +1,1 @@
+the processing is faster than the fps, so we need to add a delay more or less equal ot the fps on the processing

@@ -133,11 +133,18 @@ if len(idxs) > 0:
 		#color = [int(index_color/max_indexes*255), 255 - int(index_color/max_indexes*255), int(index_color/max_indexes*255)]
 		#color = [1 2 3]
 		print("color id ", color)
-		cv2.rectangle(image, (x, y), (x + w, y + h), color, 2)
+
 		text = "{}: {:.4f}".format(LABELS[classIDs[i]], confidences[i])
+		class_object = LABELS[classIDs[i]]
 		#text = "random"
-		cv2.putText(image, text, (x, y - 5), cv2.FONT_HERSHEY_SIMPLEX,
-			0.5, color, 2)
+
+		print("this is the text")
+		print(class_object)
+
+		if class_object == "person":
+			#cv2.putText(image, text, (x, y - 5), cv2.FONT_HERSHEY_SIMPLEX,
+				#0.5, color, 2)
+			cv2.rectangle(image, (x, y), (x + w, y + h), color, 2)
 
 # show the output image
 cv2.imshow("Image", image)

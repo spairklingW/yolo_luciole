@@ -1,6 +1,14 @@
 # YOLO-object-detection-with-OpenCV
 Object detection using YOLO object detector
 
+### In a nutshell
+
+fire command
+
+- cd Object_detection_using_video
+
+- python app.py --input videos/airport.mp4 --output output/airport_output.avi --yolo yolo-coco
+
 ### Detect objects in both images and video streams using Deep Learning, OpenCV, and Python.
 
 I’ll be using YOLOv3 in this project, in particular, YOLO trained on the COCO dataset.
