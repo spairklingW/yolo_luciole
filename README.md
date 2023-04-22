@@ -3,11 +3,24 @@ Object detection using YOLO object detector
 
 ### In a nutshell
 
+remarks:
+lower the threeshold at init if no contour is found, the contrast might be thin
+
 fire command
 
 - cd Object_detection_using_video
 
 - python app.py --input videos/airport.mp4 --output output/airport_output.avi --yolo yolo-coco
+
+for initializing 
+
+- cd init_light
+- python init_light_video.py --input video/one_light.mp4 --output video/out_vid.avi
+
+or
+
+- python app_initializer.py
+
 
 ### Detect objects in both images and video streams using Deep Learning, OpenCV, and Python.
 
