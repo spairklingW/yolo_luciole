@@ -24,3 +24,6 @@ class ILightInitializer(ILightInitializerImpl, ABC):
 
     def print_light_position(self):
         self._print_light_position_impl()
+
+    def get_lights_position_as_list(self):
+        return self._get_lights_position_as_list_impl()

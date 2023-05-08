@@ -4,6 +4,7 @@ import time
 import random
 from ImageProcessor import *
 from abc import ABC
+import yaml
 
 
 # create class interface
@@ -37,6 +38,14 @@ class ILightInitializerImpl(ABC):
         # show the image
         cv2.imshow("Image circle", image_all_lights)
         cv2.waitKey(0)
+
+    def _get_lights_position_as_list_impl(self) -> dict:
+
+        lights_position = []
+        for light in self.lights:
+            lights_position.append({"id": light.get_id(), "x": light.get_position()["x"], "y": light.get_position()["y"]})
+
+        return {"lights_position": lights_position}
 
     def _process_images_impl(self, light):
 
