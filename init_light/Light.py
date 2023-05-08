@@ -2,7 +2,7 @@ from __future__ import absolute_import
 
 
 # create class interface
-class Light(object):
+class Light():
 
     def __init__(self, id, pin = 0):
         self.intensity = None

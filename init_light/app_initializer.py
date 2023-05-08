@@ -13,4 +13,7 @@ args = vars(ap.parse_args())
 light_initializer = LightInitializerMock()
 light_initializer.detect_lights()
 light_initializer.detect_lights_position()
-light_initializer.print_light_position()
+
+debug = True
+if debug:
+    light_initializer.print_light_position()
