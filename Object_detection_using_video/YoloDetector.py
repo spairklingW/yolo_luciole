@@ -39,6 +39,7 @@ class YoloDetector(object):
         boxes = []
         confidences = []
         classIDs = []
+        persons_pos = []
 
         # loop over each of the layer outputs
         for output in layerOutputs:
@@ -97,8 +98,10 @@ class YoloDetector(object):
                     # cv2.putText(frame, text, (x, y - 5),
                     # cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
                     cv2.rectangle(frame, (x, y), (x + w, y + h), color, 2)
+                    cv2.circle(frame, (x + int(w/2), y + int(h/2)), 7, (255, 255, 255), -1)
+                    persons_pos.append({"x" : x + int(w/2), "y" : y + int(h/2)})
 
-        return frame
+        return persons_pos
 
     def __exit__(self, exception_type, exception_value, traceback):
         print("quite yolo detector")

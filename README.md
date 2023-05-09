@@ -10,7 +10,8 @@ fire command
 
 - cd Object_detection_using_video
 
-- python app.py --input videos/airport.mp4 --output output/airport_output.avi --yolo yolo-coco
+- python app.py --input videos/airport.mp4 --output output/airport_output.avi --yolo yolo-coco --light_pos_file
+../init_light/light_pos.yaml
 
 for initializing 
 
