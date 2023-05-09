@@ -1,6 +1,14 @@
 # YOLO-object-detection-with-OpenCV
 Object detection using YOLO object detector
 
+references:
+
+light bulb : philipps Hue
+https://www.techpunt.nl/de/xiaomi-yeelight-led-smart-bulb-w3.html?id=258083249&quantity=1&gclid=CjwKCAjw3ueiBhBmEiwA4BhspFhS6aJEH69gLmRfyaxTDIiHEZ0cZ5rhpsUVKTHTnfR_yvKvv7Ky6RoCnyIQAvD_BwE
+
+connect to yee light smart bulb
+https://www.youtube.com/watch?v=7SoGNwIxXr8
+
 ### In a nutshell
 
 remarks:
