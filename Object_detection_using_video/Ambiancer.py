@@ -45,6 +45,7 @@ class Ambiancer(object):
             print("persons position")
             print(persons_pos)
             self.update_ambiance(persons_pos)
+            self.display_ligths_on_frame(frame)
 
             # check if the video writer is None
             if writer is None:
@@ -62,6 +63,15 @@ class Ambiancer(object):
         print("[INFO] cleaning up...")
         writer.release()
 
+    def display_ligths_on_frame(self, frame):
+        for light in self.lights:
+            print("this is the light intensity")
+            print(light.get_intensity())
+            cv2.circle(frame, (light.get_position()["x"], light.get_position()["y"]), int(7*(40*light.get_intensity()/100)), (150, 255, 150), -1)
+
+            cv2.imshow("Image", frame)
+            cv2.waitKey(0)
+
     def update_ambiance(self, persons_pos):
         lights_intensity, sum_intensities = self.fill_light_intensity(persons_pos)
         self.compute_lights_intensity(lights_intensity, sum_intensities)
@@ -69,8 +79,11 @@ class Ambiancer(object):
 
     def distance_person_to_light(self, light, person_pos):
 
-        p_light = light.get_position()
+        p_light = [light.get_position()["x"], light.get_position()["y"]]
         p_person = [person_pos["x"], person_pos["y"]]
+        print("distance with")
+        print(p_light)
+        print(p_person)
         return math.dist(p_light, p_person)
 
     def fill_light_intensity(self, persons_pos):
@@ -87,6 +100,8 @@ class Ambiancer(object):
 
             lights_intensity[light.get_id()] = sum(light_intensity)
 
+        print("this is the intensity !!!!")
+        print(sum_intensities)
         return lights_intensity, sum_intensities
 
     def get_light_by_id(self, id):
@@ -95,9 +110,13 @@ class Ambiancer(object):
                 return light
 
     def compute_lights_intensity(self, lights_intensity, sum_intensities):
-        for key_id, value_light_intensity in lights_intensity:
+        print("lights intensities")
+        print(lights_intensity)
+        print(type(lights_intensity))
+        for key_id in lights_intensity:
+            value_light_intensity = lights_intensity[key_id]
             light = self.get_light_by_id(key_id)
-            light.udpate_intensity(int(value_light_intensity/sum_intensities))
+            light.udpate_intensity(int(value_light_intensity/sum_intensities*100))
 
     def power_intensity(self):
         for light in self.lights:

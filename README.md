@@ -14,6 +14,10 @@ https://www.youtube.com/watch?v=7SoGNwIxXr8
 remarks:
 lower the threeshold at init if no contour is found, the contrast might be thin
 
+go under venv
+
+- py311\Scripts\activate
+
 fire command
 
 - cd Object_detection_using_video
