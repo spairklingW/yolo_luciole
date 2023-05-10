@@ -4,6 +4,7 @@ from YoloDetector import *
 from VideoStream import *
 from Utils import *
 from Light import *
+import math
 
 
 class Ambiancer(object):
@@ -43,6 +44,7 @@ class Ambiancer(object):
 
             print("persons position")
             print(persons_pos)
+            self.update_ambiance(persons_pos)
 
             # check if the video writer is None
             if writer is None:
@@ -59,6 +61,47 @@ class Ambiancer(object):
         # release the file pointers
         print("[INFO] cleaning up...")
         writer.release()
+
+    def update_ambiance(self, persons_pos):
+        lights_intensity, sum_intensities = self.fill_light_intensity(persons_pos)
+        self.compute_lights_intensity(lights_intensity, sum_intensities)
+        self.power_intensity()
+
+    def distance_person_to_light(self, light, person_pos):
+
+        p_light = light.get_position()
+        p_person = [person_pos["x"], person_pos["y"]]
+        return math.dist(p_light, p_person)
+
+    def fill_light_intensity(self, persons_pos):
+
+        lights_intensity = {}
+        sum_intensities = 0
+
+        for light in self.lights:
+            light_intensity = []
+            for person_pos in persons_pos:
+                light_intensity.append(self.distance_person_to_light(light, person_pos))
+
+            sum_intensities = sum_intensities + sum(light_intensity)
+
+            lights_intensity[light.get_id()] = sum(light_intensity)
+
+        return lights_intensity, sum_intensities
+
+    def get_light_by_id(self, id):
+        for light in self.lights:
+            if light.get_id() == id:
+                return light
+
+    def compute_lights_intensity(self, lights_intensity, sum_intensities):
+        for key_id, value_light_intensity in lights_intensity:
+            light = self.get_light_by_id(key_id)
+            light.udpate_intensity(int(value_light_intensity/sum_intensities))
+
+    def power_intensity(self):
+        for light in self.lights:
+            light.power_intensity()
 
     def show_images(self, show_images):
         if show_images:

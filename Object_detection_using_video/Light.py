@@ -14,6 +14,9 @@ class Light():
     def udpate_intensity(self, intensity):
         self.intensity = intensity
 
+    def power_intensity(self):
+        pass
+
     def set_position(self, x, y):
         self.pos["x"] = x
         self.pos["y"] = y
