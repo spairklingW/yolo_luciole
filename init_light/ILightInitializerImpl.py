@@ -47,6 +47,23 @@ class ILightInitializerImpl(ABC):
 
         return {"lights_position": lights_position}
 
+    def _get_lights_rel_position_as_list_impl(self):
+        lights_position = []
+        for light in self.lights:
+            lights_position.append(
+                {"id": light.get_id(),
+                 "x": int(light.get_position()["x"]/self.W*100)/100,
+                 "y": int(light.get_position()["y"]/self.H*100)/100})
+
+
+        print("print the positions rel")
+        print(self.W)
+        print(self.H)
+        print(int(light.get_position()["x"]/self.W*100)/100)
+        print(int(light.get_position()["y"] / self.H * 100) / 100)
+
+        return {"lights_position": lights_position}
+
     def _process_images_impl(self, light):
 
         cnt = 0

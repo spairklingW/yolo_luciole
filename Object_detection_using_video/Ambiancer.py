@@ -13,6 +13,8 @@ class Ambiancer(object):
         self.yolo_detector = YoloDetector(labelsPath, weightsPath, configPath)
         self.lights = self.set_up_ligths(load_yaml(light_pos_file_path)["lights_position"])
         self.frames_proc = []
+        self.H = None
+        self.W = None
 
     def initialize(self):
         print("initialize function of Ambiancer")
@@ -39,6 +41,7 @@ class Ambiancer(object):
                 break
 
             frame = video_stream.read()
+            self.H, self.W = frame.shape[:2]
 
             persons_pos = self.yolo_detector.detect_person(frame, confidence, threshold)
 
@@ -72,7 +75,13 @@ class Ambiancer(object):
             cv2.imshow("Image", frame)
             cv2.waitKey(0)
 
+    def convert_rel_light_pos(self):
+        for light in self.lights:
+            light.set_position(int(light.get_position()["x"]*self.W), int(light.get_position()["y"]*self.H))
+            light.show_position()
+
     def update_ambiance(self, persons_pos):
+        self.convert_rel_light_pos()
         lights_intensity, sum_intensities = self.fill_light_intensity(persons_pos)
         self.compute_lights_intensity(lights_intensity, sum_intensities)
         self.power_intensity()

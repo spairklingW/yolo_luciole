@@ -3,7 +3,6 @@
 
 # import the necessary packages
 import argparse
-import imutils
 from LightInitializerMock import *
 from Utils import *
 
@@ -14,7 +13,9 @@ args = vars(ap.parse_args())
 light_initializer = LightInitializerMock()
 light_initializer.detect_lights()
 light_initializer.detect_lights_position()
-lights_position = light_initializer.get_lights_position_as_list()
+#lights_position = light_initializer.get_lights_position_as_list()
+print("AAAAAAAHhhh")
+lights_position = light_initializer.get_lights_rel_position_as_list()
 
 print("lights positions")
 print(lights_position)

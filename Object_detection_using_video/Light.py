@@ -21,6 +21,12 @@ class Light():
         self.pos["x"] = x
         self.pos["y"] = y
 
+    def show_position(self):
+        print("pos light x")
+        print(self.pos["x"])
+        print("pos light y")
+        print(self.pos["y"])
+
     def shut_on(self):
         print("shut on")
         self.light_on = True

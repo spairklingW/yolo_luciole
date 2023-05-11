@@ -16,22 +16,24 @@ class LightInitializerMock(ILightInitializer):
         self.frame_light_transition_candidate = None
         self.background_frame = None
         self.output_video_path = None
-        self.H = None
-        self.W = None
         self.image_processor = ImageProcessor()
         self.max_sum_candidate = 0
+        self.__get_frame_dimensions()
 
     @staticmethod
     def __get_frame():
         camera_stream = CameraStreamMock()
         return camera_stream.get_frame()
 
+    def __get_frame_dimensions(self):
+        self.H, self.W = self.frame_mock.shape[:2]
+
     def detect_lights(self):
         print("detect the lights")
 
         # detect which raspi pins are in used || set up a random number of lights
         # in the detector
-        light_number = 4
+        light_number = 1
         for i in range(0, light_number):
             self.lights.append(Light(i))
 
