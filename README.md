@@ -30,7 +30,7 @@ for initializing
 - cd init_light
 - python init_light_video.py --input video/one_light.mp4 --output video/out_vid.avi
 
-or
+or (UP TO DATE BELOW)
 
 - python app_initializer.py
 
