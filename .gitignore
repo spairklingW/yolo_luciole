@@ -5,3 +5,6 @@ Object_detection_using_video/yolo-coco
 Object_detection_using_video/output
 __pycache__
 .idea
+venv
+venv37
+Object_detection_using_video/py311
