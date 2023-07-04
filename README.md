@@ -1,13 +1,39 @@
 # YOLO-object-detection-with-OpenCV
 Object detection using YOLO object detector
 
+references:
+
+light bulb : philipps Hue
+https://www.techpunt.nl/de/xiaomi-yeelight-led-smart-bulb-w3.html?id=258083249&quantity=1&gclid=CjwKCAjw3ueiBhBmEiwA4BhspFhS6aJEH69gLmRfyaxTDIiHEZ0cZ5rhpsUVKTHTnfR_yvKvv7Ky6RoCnyIQAvD_BwE
+
+connect to yee light smart bulb
+https://www.youtube.com/watch?v=7SoGNwIxXr8
+
 ### In a nutshell
+
+remarks:
+lower the threeshold at init if no contour is found, the contrast might be thin
+
+go under venv
+
+- py311\Scripts\activate
 
 fire command
 
 - cd Object_detection_using_video
 
-- python app.py --input videos/airport.mp4 --output output/airport_output.avi --yolo yolo-coco
+- python app.py --input videos/airport.mp4 --output output/airport_output.avi --yolo yolo-coco --light_pos_file
+../init_light/light_pos.yaml
+
+for initializing 
+
+- cd init_light
+- python init_light_video.py --input video/one_light.mp4 --output video/out_vid.avi
+
+or (UP TO DATE BELOW)
+
+- python app_initializer.py
+
 
 ### Detect objects in both images and video streams using Deep Learning, OpenCV, and Python.
 
