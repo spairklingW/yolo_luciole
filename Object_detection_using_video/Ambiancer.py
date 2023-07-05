@@ -94,8 +94,8 @@ class Ambiancer(object):
         print(p_light)
         print(p_person)
         print("Warning : This is a mocked answer until distance is really computed !")
-        return 12
-        # return math.dist(p_light, p_person)   # from python3.9 on
+        #return 12
+        return math.dist(p_light, p_person)   # from python3.9 on
 
     def fill_light_intensity(self, persons_pos):
 

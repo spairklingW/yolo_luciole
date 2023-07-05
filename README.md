@@ -16,6 +16,7 @@ lower the threeshold at init if no contour is found, the contrast might be thin
 
 go under venv
 
+- .\py311\Scripts\activate
 - py311\Scripts\activate
 
 fire command
