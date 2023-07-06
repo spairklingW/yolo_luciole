@@ -16,7 +16,7 @@ def test_ambiancer():
     metadata_file_path = "../init_light/metadata.yaml"
     ambiancer = Ambiancer(labelsPath, weightsPath, configPath, light_pos_file_path, metadata_file_path)
 
-    person_pos = [{"x": 280, "y": 415}]
+    person_pos = [{"x": 280, "y": 415}, {"x": 250, "y": 350}, {"x": 390, "y": 390}, {"x": 100, "y": 100}]
     intensities_lights_all_persons = ambiancer.fill_light_intensity(person_pos)
     ambiancer.compute_lights_intensity_per_person(intensities_lights_all_persons)
     lights = ambiancer.get_lights()
@@ -38,7 +38,6 @@ def test_ambiancer():
     cv2.imshow("Image final", frame)
     cv2.waitKey(0)
 
-    assert 1==0
 
     print("print the intensities: end of test")
     print(intensities_lights_all_persons)
