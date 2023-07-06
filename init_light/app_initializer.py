@@ -16,11 +16,12 @@ light_initializer.detect_lights_position()
 #lights_position = light_initializer.get_lights_position_as_list()
 print("AAAAAAAHhhh")
 lights_position = light_initializer.get_lights_rel_position_as_list()
+metadata = light_initializer.get_metadata()
 
 print("lights positions")
 print(lights_position)
-
 dump_yaml(lights_position, "light_pos.yaml")
+dump_yaml(metadata, "metadata.yaml")
 
 debug = True
 if debug:

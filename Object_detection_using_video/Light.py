@@ -27,6 +27,16 @@ class Light():
         print("pos light y")
         print(self.pos["y"])
 
+    def show(self):
+        print("pos light x")
+        print(self.pos["x"])
+        print("pos light y")
+        print(self.pos["y"])
+        print("id")
+        print(self.id)
+        print("intensity")
+        print(self.intensity)
+
     def shut_on(self):
         print("shut on")
         self.light_on = True
