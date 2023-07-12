@@ -18,6 +18,8 @@ ap.add_argument("-c", "--confidence", type=float, default=0.5,
 	help="minimum probability to filter weak detections")
 ap.add_argument("-t", "--threshold", type=float, default=0.3,
 	help="threshold when applyong non-maxima suppression")
+ap.add_argument("-d", "--ml_detector_algo", type=str, default="hog",
+	help="choose yolo or hog")
 args = vars(ap.parse_args())
 
 # load the COCO class labels our YOLO model was trained on
@@ -28,9 +30,11 @@ weightsPath = os.path.sep.join([args["yolo"], "yolov3.weights"])
 configPath = os.path.sep.join([args["yolo"], "yolov3.cfg"])
 light_pos_file_path = args["light_pos_file"]
 metadata_file_path = args["metadata"]
+detector = args["ml_detector_algo"]
 
-ambiancer = Ambiancer(labelsPath, weightsPath, configPath, light_pos_file_path, metadata_file_path)
+print(detector)
+ambiancer = Ambiancer(labelsPath, weightsPath, configPath, args["confidence"], args["threshold"], light_pos_file_path, metadata_file_path, detector)
 
-ambiancer.start_stream_proc(args["input"], args["confidence"], args["threshold"], args["output"])
+ambiancer.start_stream_proc(args["input"], args["output"])
 
 ambiancer.show_images(True)
