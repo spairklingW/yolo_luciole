@@ -28,5 +28,8 @@ class ILightInitializer(ILightInitializerImpl, ABC):
     def get_lights_position_as_list(self):
         return self._get_lights_position_as_list_impl()
 
+    def get_metadata(self):
+        return self._get_metadata_impl()
+
     def get_lights_rel_position_as_list(self):
         return self._get_lights_rel_position_as_list_impl()

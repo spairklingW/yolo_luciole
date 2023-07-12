@@ -10,6 +10,8 @@ ap.add_argument("-o", "--output", required=True,
 	help="path to output video")
 ap.add_argument("-l", "--light_pos_file", required=True,
 	help="path to output video")
+ap.add_argument("-m", "--metadata", required=True,
+	help="metadata interface file path")
 ap.add_argument("-y", "--yolo", required=True,
 	help="base path to YOLO directory")
 ap.add_argument("-c", "--confidence", type=float, default=0.5,
@@ -25,8 +27,9 @@ labelsPath = os.path.sep.join([args["yolo"], "coco.names"])
 weightsPath = os.path.sep.join([args["yolo"], "yolov3.weights"])
 configPath = os.path.sep.join([args["yolo"], "yolov3.cfg"])
 light_pos_file_path = args["light_pos_file"]
+metadata_file_path = args["metadata"]
 
-ambiancer = Ambiancer(labelsPath, weightsPath, configPath, light_pos_file_path)
+ambiancer = Ambiancer(labelsPath, weightsPath, configPath, light_pos_file_path, metadata_file_path)
 
 ambiancer.start_stream_proc(args["input"], args["confidence"], args["threshold"], args["output"])
 

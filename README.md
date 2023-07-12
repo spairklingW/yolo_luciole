@@ -16,6 +16,7 @@ lower the threeshold at init if no contour is found, the contrast might be thin
 
 go under venv
 
+- .\py311\Scripts\activate
 - py311\Scripts\activate
 
 fire command
@@ -23,7 +24,7 @@ fire command
 - cd Object_detection_using_video
 
 - python app.py --input videos/airport.mp4 --output output/airport_output.avi --yolo yolo-coco --light_pos_file
-../init_light/light_pos.yaml
+../init_light/light_pos.yaml --metadata ../init_light/metadata.yaml
 
 for initializing 
 

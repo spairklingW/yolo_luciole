@@ -39,6 +39,13 @@ class ILightInitializerImpl(ABC):
         cv2.imshow("Image circle", image_all_lights)
         cv2.waitKey(0)
 
+    def _get_metadata_impl(self)-> dict:
+        metadata = {}
+        metadata["H"] = self.H
+        metadata["W"] = self.W
+
+        return metadata
+
     def _get_lights_position_as_list_impl(self) -> dict:
 
         lights_position = []
