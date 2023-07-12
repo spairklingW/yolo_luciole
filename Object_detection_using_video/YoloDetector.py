@@ -5,7 +5,7 @@ import cv2
 
 
 class YoloDetector(object):
-    def __init__(self, labelsPath, weightsPath, configPath):
+    def __init__(self, labelsPath, weightsPath, configPath, in_confidence, threshold):
         print("start yolo detector")
         self.LABELS = open(labelsPath).read().strip().split("\n")
         np.random.seed(42)
@@ -14,7 +14,10 @@ class YoloDetector(object):
         self.weightsPath = weightsPath
         self.configPath = configPath
 
-    def detect_person(self, frame, in_confidence, threshold):
+        self.in_confidence = in_confidence
+        self.threshold = threshold
+
+    def detect_person(self, frame):
         # load our YOLO object detector trained on COCO dataset (80 classes)
         # and determine only the *output* layer names that we need from YOLO
         net = cv2.dnn.readNetFromDarknet(self.configPath, self.weightsPath)
@@ -54,7 +57,7 @@ class YoloDetector(object):
 
                 # filter out weak predictions by ensuring the detected
                 # probability is greater than the minimum probability
-                if confidence > in_confidence:
+                if confidence > self.in_confidence:
                     # scale the bounding box coordinates back relative to
                     # the size of the image, keeping in mind that YOLO
                     # actually returns the center (x, y)-coordinates of
@@ -76,7 +79,7 @@ class YoloDetector(object):
 
         # apply non-maxima suppression to suppress weak, overlapping
         # bounding boxes
-        idxs = cv2.dnn.NMSBoxes(boxes, confidences, in_confidence, threshold)
+        idxs = cv2.dnn.NMSBoxes(boxes, confidences, self.in_confidence, self.threshold)
 
         # ensure at least one detection exists
         if len(idxs) > 0:
