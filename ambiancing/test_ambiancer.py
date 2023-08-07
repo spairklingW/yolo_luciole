@@ -4,17 +4,17 @@ from VideoStream import *
 from Utils import *
 from Light import *
 from Ambiancer import *
+from Config import *
 import math
 
 #python app.py --input videos/airport.mp4 --output output/airport_output.avi --yolo yolo-coco --light_pos_file ../init_light/light_pos.yaml
 
-def test_ambiancer():
-    labelsPath = "yolo-coco/coco.names"
-    weightsPath = "yolo-coco/yolov3.weights"
-    configPath = "yolo-coco/yolov3.cfg"
+def test_ambiancer_video():
     light_pos_file_path = "light_pos_test.yaml"
     metadata_file_path = "../init_light/metadata.yaml"
-    ambiancer = Ambiancer(labelsPath, weightsPath, configPath, light_pos_file_path, metadata_file_path)
+    config = Config(load_yaml("config.yaml"))
+    detector = "yolo"
+    ambiancer = Ambiancer(config, light_pos_file_path, metadata_file_path, detector)
 
     person_pos = [{"x": 280, "y": 415}, {"x": 250, "y": 350}, {"x": 390, "y": 390}, {"x": 100, "y": 100}]
     intensities_lights_all_persons = ambiancer.fill_light_intensity(person_pos)
@@ -41,3 +41,8 @@ def test_ambiancer():
 
     print("print the intensities: end of test")
     print(intensities_lights_all_persons)
+
+    print("print the sum of the intensities: should be around 1")
+    print(sum(intensities_lights_all_persons.values()))
+
+    assert 1 == 2

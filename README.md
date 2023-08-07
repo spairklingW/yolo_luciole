@@ -23,7 +23,7 @@ fire command
 
 video stream:
 
-- cd Object_detection_using_video
+- cd ambiancing
 
 - python app.py --input videos/airport.mp4 --output output/airport_output.avi --config_path config.yaml --light_pos_file
   ../init_light/light_pos.yaml --metadata ../init_light/metadata.yaml --ml_detector_algo yolo
