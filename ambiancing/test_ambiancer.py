@@ -17,10 +17,11 @@ def test_ambiancer_video():
     ambiancer = Ambiancer(config, light_pos_file_path, metadata_file_path, detector)
 
     person_pos = [{"x": 280, "y": 415}, {"x": 250, "y": 350}, {"x": 390, "y": 390}, {"x": 100, "y": 100}]
+
     intensities_lights_all_persons = ambiancer.fill_light_intensity(person_pos)
     ambiancer.compute_lights_intensity_per_person(intensities_lights_all_persons)
     lights = ambiancer.get_lights()
-    frame = cv2.imread("../Object_dection_using_image/images/dining_table.jpg")
+    frame = cv2.imread("images/dining_table.jpg")
 
     for light in lights:
         print("print dimensions image")

@@ -155,7 +155,6 @@ class Ambiancer(object):
         lights_intensity_per_person = {}
         lights_intensity_norm = {}
         distances_light_person = []
-        Itotal_person = []
         Itotal_person_sum = 0
 
         # initialize the lights_intensity_norms
@@ -167,8 +166,12 @@ class Ambiancer(object):
 
         intensities_lights_all_persons = {}
         n_person = len(persons_pos)
+        print("NUMBER OF PERSONS")
+        print(n_person)
 
         for person_pos in persons_pos:
+
+            Itotal_person = []
             # create the list of all intensities from person to all lights
             for light in self.lights:
                 distances_light_person.append(self.distance_person_to_light(light, person_pos))
