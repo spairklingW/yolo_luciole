@@ -1,14 +1,13 @@
 # To make python 2 and python 3 compatible code
 from __future__ import absolute_import
-import numpy as np
 import cv2
-import glob as glob
-import os
+from IDetector import *
 
 
-class HOGDetector(object):
-    def __init__(self):
+class HOGDetector(IDetector):
+    def __init__(self, config):
         print("start yolo detector")
+        self.config = config
         pass
 
     def detect_person(self, frame):

@@ -6,33 +6,35 @@ from Utils import *
 from Light import *
 from HOGDetector import *
 import math
+from IDetector import *
 
 
 class Ambiancer(object):
 
-    def __init__(self, labelsPath, weightsPath, configPath, confidence, threshold, light_pos_file_path, metadata_file_path, detector):
+    def __init__(self, config, light_pos_file_path, metadata_file_path, detector):
         self.H = load_yaml(metadata_file_path)["H"]
         self.W = load_yaml(metadata_file_path)["W"]
         print("What do I do here")
-        self.detector = self.initialize_detector(detector, labelsPath, weightsPath, configPath, confidence, threshold)
+        #self.detector = self.initialize_detector(detector, labelsPath, weightsPath, configPath, confidence, threshold)
+        self.detector = self.initialize_detector(detector, config)
         self.lights = self.set_up_ligths(load_yaml(light_pos_file_path)["lights_position"])
         self.frames_proc = []
 
     def initialize(self):
         print("initialize function of Ambiancer")
 
-    def initialize_detector(self, detector, labelsPath, weightsPath, configPath, confidence, threshold):
+    @staticmethod
+    def initialize_detector(detector_class, config):
 
-        detector_class = None
-        if detector == "yolo":
+        detector = None
+        if detector_class == "yolo":
             print("THIS IS THE YOLO DETECTOR")
-            detector_class = YoloDetector(labelsPath, weightsPath, configPath, confidence, threshold)
-        elif detector == "hog":
+            detector = YoloDetector(config)
+        elif detector_class == "hog":
             print("THIS IS THE HOG DETECTOR")
-            detector_class = HOGDetector()
+            detector = HOGDetector(config)
 
-        return detector_class
-
+        return detector
 
     def set_up_ligths(self, lights_pos):
         lights = []
