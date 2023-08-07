@@ -14,8 +14,6 @@ class Ambiancer(object):
     def __init__(self, config, light_pos_file_path, metadata_file_path, detector):
         self.H = load_yaml(metadata_file_path)["H"]
         self.W = load_yaml(metadata_file_path)["W"]
-        print("What do I do here")
-        #self.detector = self.initialize_detector(detector, labelsPath, weightsPath, configPath, confidence, threshold)
         self.detector = self.initialize_detector(detector, config)
         self.lights = self.set_up_ligths(load_yaml(light_pos_file_path)["lights_position"])
         self.frames_proc = []
@@ -62,14 +60,8 @@ class Ambiancer(object):
                 break
 
             frame = video_stream.read()
-            self.H, self.W = frame.shape[:2]
 
-            persons_pos = self.detector.detect_person(frame)
-
-            print("persons position")
-            print(persons_pos)
-            self.update_ambiance(persons_pos)
-            self.display_ligths_on_frame(frame)
+            persons_pos = self.update_ambiance_by_frame_processing(frame)
 
             # check if the video writer is None
             if writer is None:
@@ -88,6 +80,25 @@ class Ambiancer(object):
         # release the file pointers
         print("[INFO] cleaning up...")
         writer.release()
+
+    def start_image_proc(self, input_image_path):
+
+        frame = cv2.imread(input_image_path)
+        persons_pos = self.update_ambiance_by_frame_processing(frame)
+        self.show_results(frame, persons_pos)
+        self.frames_proc.append(frame)
+
+    def update_ambiance_by_frame_processing(self, frame):
+        self.H, self.W = frame.shape[:2]
+
+        persons_pos = self.detector.detect_person(frame)
+
+        print("persons position")
+        print(persons_pos)
+        self.update_ambiance(persons_pos)
+        self.display_ligths_on_frame(frame)
+
+        return persons_pos
 
     def show_results(self, frame, person_pos):
         for light in self.lights:
