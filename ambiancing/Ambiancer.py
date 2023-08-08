@@ -6,33 +6,33 @@ from Utils import *
 from Light import *
 from HOGDetector import *
 import math
+from IDetector import *
 
 
 class Ambiancer(object):
 
-    def __init__(self, labelsPath, weightsPath, configPath, confidence, threshold, light_pos_file_path, metadata_file_path, detector):
+    def __init__(self, config, light_pos_file_path, metadata_file_path, detector):
         self.H = load_yaml(metadata_file_path)["H"]
         self.W = load_yaml(metadata_file_path)["W"]
-        print("What do I do here")
-        self.detector = self.initialize_detector(detector, labelsPath, weightsPath, configPath, confidence, threshold)
+        self.detector = self.initialize_detector(detector, config)
         self.lights = self.set_up_ligths(load_yaml(light_pos_file_path)["lights_position"])
         self.frames_proc = []
 
     def initialize(self):
         print("initialize function of Ambiancer")
 
-    def initialize_detector(self, detector, labelsPath, weightsPath, configPath, confidence, threshold):
+    @staticmethod
+    def initialize_detector(detector_class, config):
 
-        detector_class = None
-        if detector == "yolo":
+        detector = None
+        if detector_class == "yolo":
             print("THIS IS THE YOLO DETECTOR")
-            detector_class = YoloDetector(labelsPath, weightsPath, configPath, confidence, threshold)
-        elif detector == "hog":
+            detector = YoloDetector(config)
+        elif detector_class == "hog":
             print("THIS IS THE HOG DETECTOR")
-            detector_class = HOGDetector()
+            detector = HOGDetector(config)
 
-        return detector_class
-
+        return detector
 
     def set_up_ligths(self, lights_pos):
         lights = []
@@ -60,14 +60,8 @@ class Ambiancer(object):
                 break
 
             frame = video_stream.read()
-            self.H, self.W = frame.shape[:2]
 
-            persons_pos = self.detector.detect_person(frame)
-
-            print("persons position")
-            print(persons_pos)
-            self.update_ambiance(persons_pos)
-            self.display_ligths_on_frame(frame)
+            persons_pos = self.update_ambiance_by_frame_processing(frame)
 
             # check if the video writer is None
             if writer is None:
@@ -86,6 +80,25 @@ class Ambiancer(object):
         # release the file pointers
         print("[INFO] cleaning up...")
         writer.release()
+
+    def start_image_proc(self, input_image_path):
+
+        frame = cv2.imread(input_image_path)
+        persons_pos = self.update_ambiance_by_frame_processing(frame)
+        self.show_results(frame, persons_pos)
+        self.frames_proc.append(frame)
+
+    def update_ambiance_by_frame_processing(self, frame):
+        self.H, self.W = frame.shape[:2]
+
+        persons_pos = self.detector.detect_person(frame)
+
+        print("persons position")
+        print(persons_pos)
+        self.update_ambiance(persons_pos)
+        self.display_ligths_on_frame(frame)
+
+        return persons_pos
 
     def show_results(self, frame, person_pos):
         for light in self.lights:
@@ -142,7 +155,6 @@ class Ambiancer(object):
         lights_intensity_per_person = {}
         lights_intensity_norm = {}
         distances_light_person = []
-        Itotal_person = []
         Itotal_person_sum = 0
 
         # initialize the lights_intensity_norms
@@ -154,8 +166,12 @@ class Ambiancer(object):
 
         intensities_lights_all_persons = {}
         n_person = len(persons_pos)
+        print("NUMBER OF PERSONS")
+        print(n_person)
 
         for person_pos in persons_pos:
+
+            Itotal_person = []
             # create the list of all intensities from person to all lights
             for light in self.lights:
                 distances_light_person.append(self.distance_person_to_light(light, person_pos))

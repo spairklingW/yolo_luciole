@@ -21,10 +21,17 @@ go under venv
 
 fire command
 
-- cd Object_detection_using_video
+video stream:
 
-- python app.py --input videos/airport.mp4 --output output/airport_output.avi --yolo yolo-coco --light_pos_file
-../init_light/light_pos.yaml --metadata ../init_light/metadata.yaml --ml_detector_algo yolo
+- cd ambiancing
+
+- python app.py --input videos/airport.mp4 --output output/airport_output.avi --config_path config.yaml --light_pos_file
+  ../init_light/light_pos.yaml --metadata ../init_light/metadata.yaml --ml_detector_algo yolo
+
+for image only:
+
+- python app.py --input images/baggage_claim.jpg --mode image  --config_path config.yaml --light_pos_file 
+  ../init_light/light_pos.yaml --metadata ../init_light/metadata.yaml --ml_detector_algo yolo
 
 for initializing 
 

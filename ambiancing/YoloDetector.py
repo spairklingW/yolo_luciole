@@ -2,20 +2,27 @@
 from __future__ import absolute_import
 import numpy as np
 import cv2
+from IDetector import *
 
 
-class YoloDetector(object):
-    def __init__(self, labelsPath, weightsPath, configPath, in_confidence, threshold):
+class YoloDetector(IDetector):
+    def __init__(self, config):
         print("start yolo detector")
-        self.LABELS = open(labelsPath).read().strip().split("\n")
+        self.config = config
+
+        # load the COCO class labels our YOLO model was trained on
+        self.labelsPath = config.get_yolo_labels_path()
+        # derive the paths to the YOLO weights and model configuration
+        self.weightsPath = config.get_yolo_weight_path()
+        self.configPath = config.get_yolo_cfg_path()
+
+        self.LABELS = open(self.labelsPath).read().strip().split("\n")
         np.random.seed(42)
         self.COLORS = np.random.randint(0, 255, size=(len(self.LABELS), 3),
                                    dtype="uint8")
-        self.weightsPath = weightsPath
-        self.configPath = configPath
 
-        self.in_confidence = in_confidence
-        self.threshold = threshold
+        self.in_confidence = config.get_yolo_confidence()
+        self.threshold = config.get_yolo_threshold()
 
     def detect_person(self, frame):
         # load our YOLO object detector trained on COCO dataset (80 classes)
