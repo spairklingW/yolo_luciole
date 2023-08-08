@@ -27,6 +27,11 @@ video stream:
 
 - python app.py --input videos/airport.mp4 --output output/airport_output.avi --config_path config.yaml --light_pos_file
   ../init_light/light_pos.yaml --metadata ../init_light/metadata.yaml --ml_detector_algo yolo --verbose true
+  
+V2
+
+python app.py --input videos/airport.mp4 --output output/airport_output.avi --config_path config.yaml --light_pos_file .
+./init_light/light_pos.yaml --metadata ../init_light/metadata_webcam.yaml --ml_detector_algo yolo --verbose true --mode "camera"
 
 for image only:
 
@@ -41,9 +46,27 @@ to be downloaded and pasted
 
 for initializing 
 
-- cd init_light
-- python init_light_video.py --input video/one_light.mp4 --output video/out_vid.avi
+from image:
 
+- cd init_light
+- python app_initializer.py --input ./images/living_room.jpg --output ./video/out_video.jpg --mode image --light_pos_file
+light_pos.yaml --metadata metadata.yaml --verbose true --config_path ./config-init.yaml
+  
+#apply a different threeshold for the video
+from video:
+- python app_initializer.py --input ./video/one_light.mp4 --output ./video/out_video.avi --mode video --light_pos_file lig
+ht_pos.yaml --metadata metadata.yaml --verbose true --config_path ./config-init.yaml
+  
+from camera:
+- python app_initializer.py --input ./video/one_light.mp4 --output ./video/out_video.avi --mode camera --light_pos_file li
+ght_pos.yaml --metadata metadata.yaml --verbose true --config_path ./config-init.yaml --hardware_brand light_mock
+
+(if manually shut on manualy Iphone light to simulate the real hardware light)
+
+or
+
+- python app_initializer.py --input ./video/one_light.mp4 --output ./video/out_video.avi --mode camera --light_pos_file li
+ght_pos.yaml --metadata metadata.yaml --verbose true --config_path ./config-init.yaml --hardware_brand yeelight
 or (UP TO DATE BELOW)
 
 - python app_initializer.py

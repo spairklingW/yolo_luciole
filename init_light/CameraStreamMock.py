@@ -8,7 +8,7 @@ from queue import Queue
 class CameraStreamMock(object):
 
     def __init__(self):
-        self.path = r'C:\Users\brene\source\repos\github\yolo_luciole\Object_dection_using_image\images\living_room.jpg'
+        self.path = r'C:\Users\brene\source\repos\github\yolo_luciole\ambiancing\images\living_room.jpg'
         self.frame = cv2.imread(self.path)
 
     def get_frame(self):

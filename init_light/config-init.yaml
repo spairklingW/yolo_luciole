@@ -1,0 +1,7 @@
+initializer:
+  time_start_light_on: 0.2
+  time_start_light_off: 0.7
+  setup_time: 1
+
+image_processor:
+  threshold: 50

@@ -10,8 +10,8 @@ def parse_args():
     # construct the argument parse and parse the arguments
     ap = argparse.ArgumentParser()
     ap.add_argument("-k", "--mode", type=str, default="video",
-                    help="choose between video and image input stream")
-    ap.add_argument("-i", "--input", required=True,
+                    help="choose between video and image input stream, or camera")
+    ap.add_argument("-i", "--input", required=False,
                     help="path to input video")
     ap.add_argument("-o", "--output", required=False,
                         help="path to output video")
@@ -44,6 +44,9 @@ def main():
     if mode == "video":
         # TODO: check the file format
         ambiancer.start_stream_proc(args["input"], args["output"])
+        ambiancer.show_images()
+    elif mode == "camera":
+        ambiancer.start_stream_proc()
         ambiancer.show_images()
     else:
         # TODO: check the file format

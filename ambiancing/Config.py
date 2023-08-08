@@ -25,3 +25,15 @@ class Config(object):
 
     def get_yolo_threshold(self):
         return self.config["detector"]["yolo"]["threshold"]
+
+    def get_time_start_light_on(self):
+        return self.config["initializer"]["time_start_light_on"]
+
+    def get_time_start_light_off(self):
+        return self.config["initializer"]["time_start_light_off"]
+
+    def get_setup_time(self):
+        return self.config["initializer"]["setup_time"]
+
+    def get_threshold(self):
+        return self.config["image_processor"]["threshold"]

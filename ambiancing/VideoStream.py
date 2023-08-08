@@ -57,6 +57,11 @@ class VideoStream(object):
     def more(self):
         return self.Q.qsize() > 0
 
+    def get_size(self):
+        length = int(self.stream.get(cv2.CAP_PROP_FRAME_COUNT))
+        print("this is the number of frame of the file")
+        print(length)
+
     def is_stopped(self):
         return self.stopped
 

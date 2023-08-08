@@ -1,6 +1,6 @@
 detector:
   yolo:
-    folder_path: tinyYolo
+    folder_path: tiny-yolo
     weight_path: yolov3-tiny.weights
     cfg_path: tiny.cfg
     labels_path: coco.names

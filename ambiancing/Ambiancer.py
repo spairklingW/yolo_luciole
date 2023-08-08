@@ -18,6 +18,8 @@ class Ambiancer(object):
         self.lights = self.set_up_ligths(load_yaml(light_pos_file_path)["lights_position"])
         self.frames_proc = []
         self.verbose = verbose
+        print("THEY ARE LIGHTS WITH NUMBER")
+        print(len(self.lights))
 
     def initialize(self):
         print("initialize function of Ambiancer")
@@ -43,24 +45,42 @@ class Ambiancer(object):
         print(self.H)
 
         for light_pos in lights_pos:
-            lights.append(Light(light_pos["id"], light_pos["x"]*self.W, light_pos["y"]*self.H))
+            lights.append(Light(light_pos["id"], int(light_pos["x"]*self.W), int(light_pos["y"]*self.H), light_pos["ip"]))
         return lights
 
-    def start_stream_proc(self, input_stream_path, output_file_path):
+    def start_stream_proc(self, output_file_path=None, input_stream_path=None):
         writer = None
+        video_stream = None
+        mode = None
 
-        video_stream = VideoStream(input_stream_path)
-        video_stream.start()
+        # from camera webcam
+        if input_stream_path is None and output_file_path is None:
+            video_stream = cv2.VideoCapture(0)
+            mode = "camera"
+
+            # Check if the webcam is opened correctly
+            if not video_stream.isOpened():
+                raise IOError("Cannot open webcam")
+        else:
+            video_stream = VideoStream(input_stream_path)
+            video_stream.start()
 
         while True:
 
             print("increment")
 
-            if video_stream.is_stopped():
+            if mode is not "camera" and video_stream.is_stopped():
                 print("video stream is stopped")
                 break
 
-            frame = video_stream.read()
+            if mode is "camera":
+                ret, frame = video_stream.read()
+                frame = cv2.resize(frame, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_AREA)
+            else:
+                frame = video_stream.read()
+
+            cv2.imshow("Image", frame)
+            cv2.waitKey(0)
 
             persons_pos = self.update_ambiance_by_frame_processing(frame)
 
@@ -105,10 +125,15 @@ class Ambiancer(object):
         for light in self.lights:
             print("print dimensions image")
             light.show()
+            print("this is the position of the LIIIIIGHT")
             print(int(light.get_position()["x"]))
             print(int(light.get_position()["y"]))
+            print(light.get_intensity())
+            print("dimension of the light X and Y!!!")
+            print(self.W)
+            print(self.H)
             cv2.circle(frame, (int(light.get_position()["x"]), int(light.get_position()["y"])),
-                       int(light.get_intensity() * 50), (255, 255, 255), -1)
+                       int(light.get_intensity() * 50), (255, 134, 255), -1)
 
         for pers_pos in person_pos:
             print("person pos")
@@ -116,6 +141,10 @@ class Ambiancer(object):
             print(int(pers_pos["y"]))
             cv2.circle(frame, (int(pers_pos["x"]), int(pers_pos["y"])),
                        10, (0, 0, 255), -1)
+
+        if self.verbose:
+            cv2.imshow("Show Result", frame)
+            cv2.waitKey(0)
 
     def display_ligths_on_frame(self, frame):
         for light in self.lights:
@@ -133,7 +162,7 @@ class Ambiancer(object):
             light.show_position()
 
     def update_ambiance(self, persons_pos):
-        self.convert_rel_light_pos()
+        #self.convert_rel_light_pos()
         intensities_lights_all_persons = self.fill_light_intensity(persons_pos)
         self.compute_lights_intensity_per_person(intensities_lights_all_persons)
         self.power_intensity()
@@ -178,10 +207,13 @@ class Ambiancer(object):
             for light in self.lights:
                 distances_light_person.append(self.distance_person_to_light(light, person_pos))
 
+            print("print me the resultttttttt ########################")
+            print(distances_light_person)
+
             # Ia = S/A
             print("compute Intensity_l")
             for light in self.lights:
-                lights_intensity_per_person[light.get_id()] = int(sum(distances_light_person)/self.distance_person_to_light(light, person_pos))
+                lights_intensity_per_person[light.get_id()] = sum(distances_light_person)/self.distance_person_to_light(light, person_pos)
                 Itotal_person.append(lights_intensity_per_person[light.get_id()])
 
             Itotal_person_sum = sum(Itotal_person)  # maybe if dict returns the 2 values of the 2 columns, just grab the second one
@@ -228,15 +260,19 @@ class Ambiancer(object):
             value_light_intensity = intensities_lights_all_persons[key_id]
             light = self.get_light_by_id(key_id)
             light.udpate_intensity(value_light_intensity)  #see calculation, Ia = S/A, then normalize
-
+            print("INTENSITYYYY")
+            print(value_light_intensity)
         #normalize
         #for key_id in lights_intensity_per_person:
 
-
-
     def power_intensity(self):
+        print("number of lights")
+        print(len(self.lights))
         for light in self.lights:
-            light.power_intensity()
+            if light.get_id() == 0:
+                print("this is the light 0 only !!")
+                light.show()
+                light.power_intensity()
 
     def show_images(self):
         if self.verbose:
