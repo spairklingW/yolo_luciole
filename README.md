@@ -26,12 +26,18 @@ video stream:
 - cd ambiancing
 
 - python app.py --input videos/airport.mp4 --output output/airport_output.avi --config_path config.yaml --light_pos_file
-  ../init_light/light_pos.yaml --metadata ../init_light/metadata.yaml --ml_detector_algo yolo
+  ../init_light/light_pos.yaml --metadata ../init_light/metadata.yaml --ml_detector_algo yolo --verbose true
 
 for image only:
 
 - python app.py --input images/baggage_claim.jpg --mode image  --config_path config.yaml --light_pos_file 
-  ../init_light/light_pos.yaml --metadata ../init_light/metadata.yaml --ml_detector_algo yolo
+  ../init_light/light_pos.yaml --metadata ../init_light/metadata.yaml --ml_detector_algo yolo --verbose true
+  
+for tiny-yolo use :
+--config_path config-tiny.yaml
+
+weights and cfg for tiny yolo here https://pyimagesearch.com/2020/01/27/yolo-and-tiny-yolo-object-detection-on-the-raspberry-pi-and-movidius-ncs/
+to be downloaded and pasted
 
 for initializing 
 

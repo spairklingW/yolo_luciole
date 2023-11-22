@@ -11,12 +11,13 @@ from IDetector import *
 
 class Ambiancer(object):
 
-    def __init__(self, config, light_pos_file_path, metadata_file_path, detector):
+    def __init__(self, config, light_pos_file_path, metadata_file_path, detector, verbose):
         self.H = load_yaml(metadata_file_path)["H"]
         self.W = load_yaml(metadata_file_path)["W"]
         self.detector = self.initialize_detector(detector, config)
         self.lights = self.set_up_ligths(load_yaml(light_pos_file_path)["lights_position"])
         self.frames_proc = []
+        self.verbose = verbose
 
     def initialize(self):
         print("initialize function of Ambiancer")
@@ -122,8 +123,9 @@ class Ambiancer(object):
             print(light.get_intensity())
             cv2.circle(frame, (light.get_position()["x"], light.get_position()["y"]), int(7*(40*light.get_intensity()/100)), (150, 255, 150), -1)
 
-            cv2.imshow("Image", frame)
-            cv2.waitKey(0)
+            if self.verbose:
+                cv2.imshow("Image", frame)
+                cv2.waitKey(0)
 
     def convert_rel_light_pos(self):
         for light in self.lights:
@@ -236,8 +238,8 @@ class Ambiancer(object):
         for light in self.lights:
             light.power_intensity()
 
-    def show_images(self, show_images):
-        if show_images:
+    def show_images(self):
+        if self.verbose:
             for f in self.frames_proc:
                 # show the output image
                 cv2.imshow("Image", f)

@@ -1,6 +1,7 @@
 yolo-coco
 yolo-coco2
 init_light/video
+ambiancing/tiny-yolo
 Object_detection_using_video/yolo-coco
 Object_detection_using_video/output
 __pycache__
