@@ -1,0 +1,10 @@
+detector:
+  yolo:
+    folder_path: tinyYolo
+    weight_path: yolov3-tiny.weights
+    cfg_path: tiny.cfg
+    labels_path: coco.names
+    confidence: 0.2 #"minimum probability to filter weak detections"
+    threshold: 0.1 #"threshold when applyong non-maxima suppression"
+  hog:
+
